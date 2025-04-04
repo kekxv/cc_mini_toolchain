@@ -1,0 +1,9 @@
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "gcc-armv7l-linux-ulibc-luckfox",
+    build_file_content = """filegroup(name = "toolchain", srcs = glob(["**"]), visibility = ["//visibility:public"])""",
+    integrity = "sha256-9q8QMKdGtKxr8ycKRtefYqISqdzH5mG0oVLOR2f4DuI=",
+    type = "tar.gz",
+    url = "https://github.com/kekxv/luckfox-bazel/releases/download/linux-rockchip830-uclibcgnu-toolchain/arm-rockchip830-linux-uclibcgnueabihf.tar.gz",
+)

@@ -1,0 +1,10 @@
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "glibc-linux-gnu-x86_64",
+    build_file_content = """filegroup(name = "toolchain", srcs = glob(["**"]), visibility = ["//visibility:public"])""",
+    integrity = "sha256-hq7+2gJWgu+FkI/x0cimrps7ueq5cDMQ2jCzdNu2DWE=",
+    strip_prefix = "",
+    type = "tar.bz2",
+    url = "https://github.com/ClangTools/clang-binaries/releases/download/linux-gcc12-x86_64-buildroot-2022.11.3-glibc.2.36/linux-gcc12-x86_64-buildroot-2022.11.3-gnu-glibc_2.36.tar.bz2",
+)

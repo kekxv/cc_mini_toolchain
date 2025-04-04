@@ -1,0 +1,3 @@
+"""A centralized module defining all repositories required for third party examples of rules_foreign_cc"""
+
+include("//third-party/zlib:repositories.MODULE.bazel")

@@ -1,0 +1,13 @@
+include("//toolchains/toolchains/glibc_linux_x86_64:toolchains.MODULE.bazel")
+
+include("//toolchains/toolchains/gcc-armv7l-linux-ulibc-luckfox:toolchains.MODULE.bazel")
+
+register_toolchains(
+    "//toolchains/toolchains/glibc_linux_x86_64:toolchains",
+    "//toolchains/toolchains/gcc-armv7l-linux-ulibc-luckfox:toolchains",
+)
+
+register_execution_platforms(
+    "//toolchains/platforms:linux_luckfox",
+    "//toolchains/platforms:linux_x86_64",
+)

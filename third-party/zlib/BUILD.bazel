@@ -1,0 +1,35 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+
+package(default_visibility = ["//visibility:public"])
+
+cmake(
+    name = "zlib",
+    cache_entries = select({
+        "@platforms//os:windows": {
+            "ZLIB_BUILD_EXAMPLES": "OFF",
+            "BUILD_SHARED_LIBS": "OFF",
+            "CMAKE_SYSTEM_NAME": "Windows",
+            "CMAKE_RC_COMPILER": "$$EXT_BUILD_ROOT/external/gcc-mingw-msvcrt-ubuntu-i686/bin/i686-w64-mingw32-windres",
+        },
+        "//conditions:default": {
+            "ZLIB_BUILD_EXAMPLES": "OFF",
+            "BUILD_SHARED_LIBS": "OFF",
+        },
+    }),
+    lib_source = select({
+        "@platforms//os:linux": "@zlib_pic//:all",
+        "//conditions:default": "@zlib//:all",
+    }),
+    out_static_libs = select({
+        "@platforms//os:windows": ["libzlibstatic.a"],
+        "//conditions:default": ["libz.a"],
+    }),
+    visibility = ["//visibility:public"],
+)
+
+cc_binary(
+    name = "zlib_usage_example",
+    srcs = ["zlib-example.cpp"],
+    deps = [":zlib"],
+)

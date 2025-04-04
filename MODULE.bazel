@@ -1,0 +1,10 @@
+bazel_dep(name = "platforms", version = "0.0.11")
+bazel_dep(name = "rules_cc", version = "0.1.1")
+bazel_dep(name = "rules_foreign_cc", version = "0.14.0")
+
+cc_configure = use_extension("@rules_cc//cc:extensions.bzl", "cc_configure_extension")
+use_repo(cc_configure, "local_config_cc")
+
+include("//third-party:repositories.MODULE.bazel")
+
+include("//toolchains/toolchains:toolchains.MODULE.bazel")

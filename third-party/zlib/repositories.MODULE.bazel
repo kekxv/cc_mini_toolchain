@@ -1,0 +1,44 @@
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+all_content = """
+filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])
+"""
+
+strip_prefix = "zlib-1.3.1"
+
+integrity = "sha256-mpOyt9/ax3zrpaVYpYDnRmfdb+3kWFuR7vtg8Dty3yM="
+
+urls = [
+    "https://github.com/madler/zlib/releases/download/v1.3.1/zlib-1.3.1.tar.gz",
+]
+
+http_archive(
+    name = "zlib_pic",
+    build_file_content = all_content,
+    integrity = integrity,
+    patch_cmds = [
+        # "sed -i.bak 's/#define NOUNCRYPT/ \\/\\/#define NOUNCRYPT/g' contrib/minizip/unzip.c",
+        "sed -i.bak 's/target_include_directories(zlib /# target_include_directories(zlib /g' CMakeLists.txt",
+        "sed -i.bak 's/zlib zlibstatic/zlibstatic/g' CMakeLists.txt",
+        "sed -i.bak 's/set_target_properties(zlib P/# set_target_properties(zlib P/g' CMakeLists.txt",
+        "sed -i.bak 's/add_library(zlib /# add_library(zlib /g' CMakeLists.txt",
+        "sed -i.bak 's/project(zlib C)/project(zlib C)\\nadd_definitions(-fPIC)/g' CMakeLists.txt",
+    ],
+    strip_prefix = strip_prefix,
+    urls = urls,
+)
+
+http_archive(
+    name = "zlib",
+    build_file_content = all_content,
+    integrity = integrity,
+    patch_cmds = [
+        # "sed -i.bak 's/#define NOUNCRYPT/ \\/\\/#define NOUNCRYPT/g' contrib/minizip/unzip.c",
+        "sed -i.bak 's/target_include_directories(zlib /# target_include_directories(zlib /g' CMakeLists.txt",
+        "sed -i.bak 's/zlib zlibstatic/zlibstatic/g' CMakeLists.txt",
+        "sed -i.bak 's/set_target_properties(zlib P/# set_target_properties(zlib P/g' CMakeLists.txt",
+        "sed -i.bak 's/add_library(zlib /# add_library(zlib /g' CMakeLists.txt",
+    ],
+    strip_prefix = strip_prefix,
+    urls = urls,
+)
