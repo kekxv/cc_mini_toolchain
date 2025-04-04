@@ -10,11 +10,15 @@ cmake(
             "ZLIB_BUILD_EXAMPLES": "OFF",
             "BUILD_SHARED_LIBS": "OFF",
             "CMAKE_SYSTEM_NAME": "Windows",
-            "CMAKE_RC_COMPILER": "$$EXT_BUILD_ROOT/external/gcc-mingw-msvcrt-ubuntu-i686/bin/i686-w64-mingw32-windres",
+            # "CMAKE_RC_COMPILER": "$$EXT_BUILD_ROOT/external/gcc-mingw-msvcrt-ubuntu-i686/bin/i686-w64-mingw32-windres",
+            "CMAKE_C_COMPILER_WORKS": "TRUE",
+            "CMAKE_CXX_COMPILER_WORKS": "TRUE",
         },
         "//conditions:default": {
             "ZLIB_BUILD_EXAMPLES": "OFF",
             "BUILD_SHARED_LIBS": "OFF",
+            "CMAKE_C_COMPILER_WORKS": "TRUE",
+            "CMAKE_CXX_COMPILER_WORKS": "TRUE",
         },
     }),
     lib_source = select({
