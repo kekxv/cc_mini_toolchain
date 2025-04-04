@@ -4,6 +4,7 @@ load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "ACTION_NAMES")
 load(
     "@bazel_tools//tools/cpp:cc_toolchain_config_lib.bzl",
     #"compiler_executable",  # Added for potential future flexibility
+    "artifact_name_pattern",
     "feature",
     "flag_group",
     "flag_set",
@@ -48,6 +49,38 @@ all_cpp_compile_actions = [
     # ACTION_NAMES.clif_match, # Removed unless specifically needed
 ]
 
+windows_artifact_name_patterns = [
+    artifact_name_pattern(
+        category_name = "object_file",
+        prefix = "",
+        extension = ".obj",
+    ),
+    artifact_name_pattern(
+        category_name = "static_library",
+        prefix = "",
+        extension = ".lib",
+    ),
+    artifact_name_pattern(
+        category_name = "alwayslink_static_library",
+        prefix = "",
+        extension = ".lo.lib",
+    ),
+    artifact_name_pattern(
+        category_name = "executable",
+        prefix = "",
+        extension = ".exe",
+    ),
+    artifact_name_pattern(
+        category_name = "dynamic_library",
+        prefix = "lib",
+        extension = ".dll",
+    ),
+    artifact_name_pattern(
+        category_name = "interface_library",
+        prefix = "",
+        extension = ".if.lib",
+    ),
+]
 # --- Private Rule Implementation for cc_toolchain_config ---
 
 def _cc_mini_toolchain_config_impl(ctx):
@@ -142,6 +175,7 @@ def _cc_mini_toolchain_config_impl(ctx):
     return cc_common.create_cc_toolchain_config_info(
         ctx = ctx,
         features = features,
+        artifact_name_patterns = windows_artifact_name_patterns if ctx.attr.target_system_name == "windows" else [],
         # Assume includes are handled by sysroot or compiler wrappers for simplicity now
         cxx_builtin_include_directories = ctx.attr.cxx_builtin_include_directories,
         toolchain_identifier = ctx.attr.toolchain_identifier,
