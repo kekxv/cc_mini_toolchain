@@ -1,0 +1,58 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        bazel-version: [8.1.0]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mount bazel cache  # Optional
+        uses: actions/cache@v3
+        with:
+          path: "~/.cache/bazel"
+          key: bazel
+      - uses: bazel-contrib/setup-bazel@0.12.1
+        with:
+          bazelisk-version: 1.18.0
+          # Avoid downloading Bazel every time.
+          bazelisk-cache: true
+          # Store build cache per workflow.
+          disk-cache: ${{ github.workflow }}
+          # Share repository cache between workflows.
+          repository-cache: true
+      - name: Mount bazel cache  # Optional
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/bazel
+            ~/.cache/bazelisk
+          key: bazel
+      - name: Set Bazel Version ${{ matrix.bazel-version }} .
+        run: |
+          echo ${{ matrix.bazel-version }} > .bazelversion 
+
+      - name: bazelisk version
+        run: |
+          bazel version
+        env:
+          USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
+
+      - name: run example
+        run: |
+          bazel run --config=linux-platform --curses=no //example:hello_world
+        env:
+          USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
+
+      - name: run zlib_usage_example
+        run: |
+          bazel run --config=linux-platform --curses=no //third-party/zlib:zlib_usage_example
+        env:
+          USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
