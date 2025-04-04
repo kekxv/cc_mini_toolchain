@@ -53,7 +53,7 @@ jobs:
 
       - name: build rules_foreign_cc tools by local
         run: |
-          bazel run --config=linux-platform --curses=no bazel build @rules_foreign_cc//foreign_cc:defs --spawn_strategy=local
+          bazel build --config=linux-platform --curses=no @rules_foreign_cc//foreign_cc:defs --spawn_strategy=local
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
 
