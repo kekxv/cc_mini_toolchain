@@ -57,3 +57,24 @@ jobs:
           bazel run --config=linux-platform --curses=no //third-party/zlib:zlib_usage_example --spawn_strategy=local
         env:
           USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
+
+      - name: sed linux_x86_64
+        run: |
+          sed -i.bak 's/\"\/\/toolchains\/platforms:linux_x86_64\",//g' toolchains/toolchains/toolchains.MODULE.bazel
+          sed -i.bak 's/\"\/\/toolchains\/toolchains\/glibc_linux_x86_64:toolchains\",//g' toolchains/toolchains/toolchains.MODULE.bazel
+        env:
+          USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
+
+      - name: build luckfox example
+        run: |
+          bazel build --config=linux-luckfox-platform --curses=no //example:hello_world
+          file bazel-bin/example/hello_world
+        env:
+          USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
+
+      - name: build luckfox zlib_usage_example
+        run: |
+          bazel build --config=linux-luckfox-platform --curses=no //third-party/zlib:zlib_usage_example
+          file bazel-bin/third-party/zlib/zlib_usage_example
+        env:
+          USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
